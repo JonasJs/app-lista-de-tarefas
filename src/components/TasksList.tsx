@@ -19,6 +19,21 @@ interface ITasksListProps {
 }
 
 export function TasksList({ tasks, toggleTaskDone, removeTask }: ITasksListProps) {
+
+  const hasDone = (status: boolean) => {
+    if(status) {
+      return {
+        container: styles.taskMarkerDone,
+        text: styles.taskTextDone,
+      }
+    }
+
+    return {
+      container: styles.taskMarker,
+      text: styles.taskText,
+    }
+  }
+
   return (
     <FlatList
       data={tasks}
@@ -33,11 +48,11 @@ export function TasksList({ tasks, toggleTaskDone, removeTask }: ITasksListProps
                 testID={`button-${index}`}
                 activeOpacity={0.7}
                 style={styles.taskButton}
-                //TODO - use onPress (toggle task) prop
+                onPress={() => toggleTaskDone(item.id)}
               >
                 <View 
                   testID={`marker-${index}`}
-                  //TODO - use style prop 
+                  style={hasDone(item.done).container}
                 >
                   { item.done && (
                     <Icon 
@@ -49,7 +64,7 @@ export function TasksList({ tasks, toggleTaskDone, removeTask }: ITasksListProps
                 </View>
 
                 <Text 
-                  //TODO - use style prop
+                  style={hasDone(item.done).text}
                 >
                   {item.title}
                 </Text>
